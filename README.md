@@ -22,4 +22,59 @@ There are multiple steps to configuring the boot. First off, we need to modify t
 
 * Note that if you modify the dhcp config, you should modify your katello install options so the configuration is not replaced after an upgrade/re-run of satellite installer. 
 
-###
+### Modify the DHCP configuration. 
+
+First, modify the DHCP configuration to include your networks in which you wish to serve DHCP requests from. If you need to span to multiple subnets, don't forget to add DHCP helpers. 
+
+Below is an example configuration, note the grub1 PXE options: 
+
+```
+dhcpd.conf
+omapi-port 7911;
+default-lease-time 3600;
+max-lease-time 86400;
+log-facility local7;
+ddns-update-style none;
+option domain-name "somedomain.com";
+option domain-name-servers 128.163.133.51, 128.9.49.51;
+allow booting;
+allow bootp;
+option fqdn.no-client-update on; # set the "O" and "S" flag bits
+option fqdn.rcode2 255;
+next-server 128.10.152.10;
+# grub1 pxe options
+option space PXE;
+option PXE.mtftp-ip code 1 = ip-address;
+option PXE.mtftp-cport code 2 = unsigned integer 16;
+option PXE.mtftp-sport code 3 = unsigned integer 16;
+option PXE.mtftp-tmout code 4 = unsigned integer 8;
+option PXE.mtftp-delay code 5 = unsigned integer 8;
+option architecture code 93 = unsigned integer 16;
+if option architecture = 00:00 {
+filename "pxelinux.0";
+} elsif option architecture = 00:09 {
+# filename "shim.efi";
+filename "/pxelinux/grub.efi";
+} elsif option architecture = 00:07 {
+# filename "shim.efi";
+filename "/pxelinux/grub.efi";
+} elsif option architecture = 00:06 {
+# filename "shim.efi";
+filename "/pxelinux/grub.efi";
+} else {
+filename "pxelinux.0";
+}
+include "/etc/dhcp/dhcpd.hosts";
+#################################
+# somedomain.com
+#################################
+# some random network
+subnet 128.10.152.0 netmask 255.255.248.0 {
+range 128.10.152.1 128.10.159.254;
+option subnet-mask 255.255.248.0;
+option routers 128.10.152.1;
+option broadcast-address 128.10.159.255;
+}
+```
+
+### Create the legacy grub folder structure
