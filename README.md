@@ -6,7 +6,7 @@ This script is used to convert the tftp boot files (found in /var/lib/tftpboot/p
 
 Why is this useful? Recently I encountered some HP servers which have an additional 10GbE card in one of the PCI-E slots on the machine which is used for the PXE boot. 
 
-Unfortunately this additional interface only supports UEFI boot and not classic bios boot. By default Satellite 6 uses the shim image for UEFI(https://github.com/rhinstaller/shim) but this doesn't work with the older Linux kernel used by RHEL6.X (https://github.com/rhinstaller/shim/issues/65). 
+Unfortunately this additional interface only supports UEFI boot and not classic bios boot. By default Satellite 6 uses the shim image for UEFI (https://github.com/rhinstaller/shim) but this doesn't work with the older Linux kernel used by RHEL6.X (https://github.com/rhinstaller/shim/issues/65). 
 
 If this script is executed on a capsule or satellite server which has TFTP enabled, it will automatically replace the boot files using the old format which gives a successful boot for RHEL6. 
 
