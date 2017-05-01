@@ -77,4 +77,35 @@ option broadcast-address 128.10.159.255;
 }
 ```
 
+* If you modify the dhcp config, don't forget to restart the dhcpd daemon: 
+
+```
+	systemctl restart dhcpd 
+```
+
 ### Create the legacy grub folder structure
+
+- Create the folder /var/lib/tftpboot/pxelinux/ and the grub.efi image from a RHEL6 installation or the RHEL6 DVD (should be found in /boot/EFI or /boot/efi/EFI/redhat). 
+- Set the correct SELinux context and file permissions on the folder and boot image. 
+- Copy the RHEL6/7 images from /var/lib/tftpboot/images/ folder (vmlinuz, img files) to /var/lib/tftpboot/pxelinux/ and give files correct permissions. Note that the script performs this step automatically. 
+
+### Modify CRON to run the efi-converter script
+
+- Download the efi-converter.sh script, give it the correct context and file permissions. If you wish to run the script as another user, make sure you adjust the file location/permissions so the user can execute the script. 
+
+- The example below shows how to run the script from root home directory via root's crontab (crontab -e). 
+
+```
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+HOME=/
+/* * * * * /root/efi-converter.sh
+```
+
+* More cron options can be found here: https://www.centos.org/docs/5/html/5.2/Deployment_Guide/s2-autotasks-cron-configuring.html
+
+### Final steps/Troubleshooting 
+
+- Make sure all steps have been done correctly. The script can be run manually and boot files can be checked in /var/lib/tftpboot/pxelinux. 
+- Restart services and boot a server, it should network boot correctly. 
