@@ -85,7 +85,7 @@ option broadcast-address 128.10.159.255;
 
 ### Create the legacy grub folder structure
 
-- Create the folder /var/lib/tftpboot/pxelinux/ and the grub.efi image from a RHEL6 installation or the RHEL6 DVD (should be found in /boot/EFI or /boot/efi/EFI/redhat). 
+- Create the folder /var/lib/tftpboot/pxelinux/ and the grub.efi image from a RHEL6 installation (should be found in /boot/EFI or /boot/efi/EFI/redhat) or the RHEL6 DVD (should be found in /EFI/BOOT/BOOTX64.efi and can be renamed to grub.efi). 
 - Set the correct SELinux context and file permissions on the folder and boot image. 
 - Copy the RHEL6/7 images from /var/lib/tftpboot/images/ folder (vmlinuz, img files) to /var/lib/tftpboot/pxelinux/ and give files correct permissions. Note that the script performs this step automatically. 
 
